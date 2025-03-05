@@ -9,16 +9,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class RestControllerExceptionHandler {
 
-    @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<ErrorResponseDto> productNotFoundExceptionResponseEntity(ProductNotFoundException productNotFoundException){
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<ErrorResponseDto> productNotFoundExceptionResponseEntity(CustomException productNotFoundException){
         return new ResponseEntity<>(new ErrorResponseDto(productNotFoundException.getMessage())
                 , HttpStatus.NOT_FOUND);
     }
-
-    @ExceptionHandler(InsufficientStockException.class)
-    public ResponseEntity<ErrorResponseDto> insufficientStockExceptionResponseEntity(InsufficientStockException insufficientStockException){
-        return new ResponseEntity<>(new ErrorResponseDto(insufficientStockException.getMessage())
-                , HttpStatus.NOT_FOUND);
-    }
-
 }
