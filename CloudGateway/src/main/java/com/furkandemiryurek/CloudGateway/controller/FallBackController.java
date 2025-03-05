@@ -20,4 +20,9 @@ public class FallBackController {
     public String paymentServiceFallBack() {
         return "Payment Service is Down";
     }
+
+    @GetMapping("/mailServiceFallBack")
+    public String mailServiceFallBack() {
+        return "Mail Service is Down";
+    }
 }

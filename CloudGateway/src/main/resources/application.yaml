@@ -36,4 +36,13 @@ spring:
             args:
               name: PAYMENT-SERVICE
               fallbackUri: forward:/paymentServiceFallBack
+        - id: MAIL-SERVICE
+          uri: lb://MAIL-SERVICE
+          predicates:
+            - Path=/mail/**
+          filters:
+            -name: CircuitBreaker
+            args:
+              name: MAIL-SERVICE
+              fallbackUri: forward:/mailServiceFallBack
 

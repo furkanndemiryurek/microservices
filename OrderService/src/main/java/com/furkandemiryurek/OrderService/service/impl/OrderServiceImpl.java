@@ -13,6 +13,8 @@ import com.furkandemiryurek.OrderService.mapper.OrderMapper;
 import com.furkandemiryurek.OrderService.repository.OrderRepository;
 import com.furkandemiryurek.OrderService.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,6 +24,8 @@ import java.util.Random;
 @Service
 public class OrderServiceImpl implements OrderService {
 
+    private static final String userMail = "demiryureekk@gmail.com";
+
     @Autowired
     OrderRepository orderRepository;
 
@@ -30,6 +34,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     PaymentService paymentService;
+
+    private final KafkaTemplate<String, Object> kaftaTemplate;
+
+    public OrderServiceImpl(KafkaTemplate<String, Object> kaftaTemplate) {
+        this.kaftaTemplate = kaftaTemplate;
+    }
 
     @Override
     public Long placeOrder(OrderRequestDto orderRequestDto) {
@@ -44,8 +54,10 @@ public class OrderServiceImpl implements OrderService {
         PaymentRequest paymentRequest = new PaymentRequest();
         paymentRequest.setOrderId(order.getId());
         paymentRequest.setAmount(order.getAmount());
-        paymentRequest.setReferenceNumber("AABBCC");
+        paymentRequest.setReferenceNumber(new Random().nextInt(10000) + "");
         paymentService.doPayment(paymentRequest);
+
+        sendKafkaMessage(userMail);
 
         return order.getId();
     }
@@ -68,5 +80,9 @@ public class OrderServiceImpl implements OrderService {
         orderResponseDto.setPaymentResponse(paymentResponse);
 
         return orderResponseDto;
+    }
+
+    private void sendKafkaMessage(String message) {
+        kaftaTemplate.send("furkan", message);
     }
 }

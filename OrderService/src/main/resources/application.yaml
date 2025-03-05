@@ -23,7 +23,11 @@ spring:
     name: ORDER-SERVICE
   config:
     import: configserver:http://localhost:9087
-
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
 resilience4j:
   circuitbreaker:
@@ -37,3 +41,5 @@ resilience4j:
         permitted-number-of-calls-in-half-open-state: 3
         sliding-window-size: 10
         sliding-window-type: COUNT_BASED
+
+
