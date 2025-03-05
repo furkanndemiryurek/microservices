@@ -2,7 +2,7 @@ package com.furkandemiryurek.OrderService.external.response;
 
 public class SendMailDto {
 
-    private String from = "31johndoe31313131@gmail.com";
+    private String from;
     private String to;
     private String subject;
     private String text;
